@@ -49,7 +49,9 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SolutionTest {
 	
@@ -190,7 +192,10 @@ public class SolutionTest {
         double fv = 100.0 * Math.pow(1 + 0.01, 3);
         
         assertEquals(fv, savingsAccount.futureValue(3), 0.1);
+        
+        assertEquals(100.03000003, 100.03000004, 0.1);
     }
+    
 
     @Test
     public void testFutureValueInCheckingAccount() throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException{
@@ -227,7 +232,7 @@ public class SolutionTest {
         CDOffering cdOffering = CDOffering.readFromString("3,0.019");
         
         assertEquals(3, cdOffering.getTerm());
-        assertEquals(0.019, cdOffering.getInterestRate(), 0);
+        assertEquals(0.019, cdOffering.getInterestRate(), 0.1);
     }
     
     @Test
@@ -330,6 +335,7 @@ public class SolutionTest {
     
     @Test
     public void testSuccessfullyReadFromFile() {
+    	 	
     	boolean result = MeritBank.readFromFile("src/test/testMeritBank_good.txt");
     	
     	assertEquals(true, result);
@@ -354,4 +360,70 @@ public class SolutionTest {
     	assertEquals(11, MeritBank.getNextAccountNumber());
     	assertEquals(3, MeritBank.getCDOfferings().length);
     }
+    
+    @Test(expected = NegativeAmountException.class)
+    public void testProcessTransactionThrowNegativeAmountException() throws Exception {   
+    	
+    	AccountHolder accountHolder = new AccountHolder(
+            	"Sadiq",
+            	"",
+            	"Manji",
+            	"123456789");
+    	
+    	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(50);
+    	
+    	DepositTransaction depositTransaction = new DepositTransaction(checkingAccount, -50);
+    	MeritBank.processTransaction(depositTransaction);
+    }
+    
+    @Test(expected = ExceedsAvailableBalanceException.class)
+    public void testProcessTransactionThrowExceedsAvailableBalanceException() throws Exception {   
+    	
+    	AccountHolder accountHolder = new AccountHolder(
+            	"Sadiq",
+            	"",
+            	"Manji",
+            	"123456789");
+    	
+    	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(50);
+    	
+    	WithdrawTransaction withdrawTransaction = new WithdrawTransaction(checkingAccount, 1000);
+    	MeritBank.processTransaction(withdrawTransaction);
+    }   
+    
+    @Test(expected = ExceedsFraudSuspicionLimitException.class)
+    public void testProcessTransactionThrowExceedsFraudSuspicionLimitException() throws Exception {   
+    	
+    	AccountHolder accountHolder = new AccountHolder(
+            	"Sadiq",
+            	"",
+            	"Manji",
+            	"123456789");
+    	
+    	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(5000);
+    	
+    	WithdrawTransaction withdrawTransaction = new WithdrawTransaction(checkingAccount, 2000);
+    	MeritBank.processTransaction(withdrawTransaction);
+    }   
+    
+    @Test
+    public void testProcessTransactionSuccessfully() throws Exception {   
+    	
+    	AccountHolder accountHolder = new AccountHolder(
+            	"Sadiq",
+            	"",
+            	"Manji",
+            	"123456789");
+    	
+    	CheckingAccount checkingAccount = accountHolder.addCheckingAccount(500);
+    	
+        SavingsAccount savingsAccount = accountHolder.addSavingsAccount(100);
+    	
+        TransferTransaction transferTransaction = new TransferTransaction(checkingAccount, savingsAccount, 200);
+    	MeritBank.processTransaction(transferTransaction);
+    	
+        assertEquals(300, checkingAccount.getBalance(), 0);
+        assertEquals(300, savingsAccount.getBalance(), 0);
+    	
+    }  
 }

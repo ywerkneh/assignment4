@@ -1,51 +1,74 @@
-package com.meritamerica.assignment4;
+/* Week 5 - Partner Pair Assignment #4
+ *  October 25, 2020
+ */
 
-import java.text.DateFormat;
+package com.meritamerica.assignment4;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
 
 
-public class CheckingAccount extends BankAccount{
+public class CheckingAccount extends BankAccount {
+	
+	//private static final double INTEREST_RATE = 0.0001;
+	private static double balance;
+	private static double interestRate = 0.0001;
+	private static Date date;
+	
+	
+		public CheckingAccount() {
+			super(MeritBank.getNextAccountNumber(), balance, interestRate, date);
+		}
+		
+		public CheckingAccount(double openingBalance) {
+			super(MeritBank.getNextAccountNumber(), openingBalance, interestRate);
+		}
+	
+		public CheckingAccount(double openingBalance, double interestRate) {
+			super(openingBalance, interestRate);
+		}	
+		
+		
+		public CheckingAccount(long accountNumber, double openingBalance, double interestRate, Date date) {
+			super(accountNumber, openingBalance, interestRate, date);
+		}
+			
 
-    public CheckingAccount(double balance, double interestRate) {
-        super(balance, interestRate);
-    }
+		
 
-    public CheckingAccount(double balance) {
-        super(balance);
-    }
+		
+		
+		
+	static CheckingAccount readFromString(String accountData) throws ParseException {
+		
+		SimpleDateFormat dateFormatter = new SimpleDateFormat ("dd/MM/yyyy");
+		
+		String[]chd = accountData.split(",");
+		
+		long accountNumber = Long.parseLong(chd[0]);
+		double balance = Double.parseDouble(chd[1]);
+		double interestRate = Double.parseDouble(chd[2]);
+		
+		Date date = dateFormatter.parse(chd[3]);
+		
+		
+		CheckingAccount checkingAccountInfo = new CheckingAccount(accountNumber, balance,
+				interestRate,date);
+		
+		System.out.println(checkingAccountInfo.getBalance() );
+		
+		return checkingAccountInfo;
+		
 
-    public CheckingAccount(double balance, double interestRate, Date accountOpenedOn) {
-        super(balance, interestRate, accountOpenedOn);
-    }
 
-    public CheckingAccount(long accountNumber, double balance, double interestRate, Date accountOpenedOn) {
-        super(accountNumber, balance, interestRate, accountOpenedOn);
-    }
+	}
+	
+	
+	public String toString() {
+		
+		return "CHECKING ACCOUNT BALANCE" + getBalance() + "CHECKING INTEREST RATE" + getInterestRate() + "CHECKING ACCOUNT BALANCE IN 3 YEARS:" + futureValue(3);
+		
+	}
 
-    //static CheckingAccount readFromString(String accountData) throws ParseException
-    public static CheckingAccount readFromString(String accountData) throws NumberFormatException{
-        final int NUM_FIELDS = 4;
-        String[] field = accountData.split(",");
-        if (field.length != NUM_FIELDS) {
-            throw new NumberFormatException();
-        }
-
-        CheckingAccount newCheckingAccount = null;
-        try {
-            DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
-            newCheckingAccount = new CheckingAccount(Long.parseLong(field[0]), Double.parseDouble(field[1]),
-                    Double.parseDouble(field[2]), dateFormat.parse(field[3]));
-        }
-        catch (NumberFormatException e) {
-            throw e;
-
-        }
-        catch (ParseException e) {
-            throw new NumberFormatException();
-        }
-
-        return newCheckingAccount;
-    }
 }

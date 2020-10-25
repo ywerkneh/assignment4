@@ -1,7 +1,8 @@
 
-/* Week 5 -Partner Pair Assignment #4
- * October 25th, 2020
- * */
+/* Week 5 - Partner Pair Assignment #4
+ *  October 25, 2020
+ */
+
 package com.meritamerica.assignment4;
 import java.util.Date;
 
@@ -20,7 +21,7 @@ public class DepositTransaction extends Transaction {
 	}
 }
 
-	/*@Override
+	@Override
 	public void process()
 throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
 		
@@ -50,4 +51,4 @@ throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSu
 			targetAccount.deposit(amount);
 		}
 	}
-}*/
+}

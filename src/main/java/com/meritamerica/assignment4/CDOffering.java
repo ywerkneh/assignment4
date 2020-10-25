@@ -1,68 +1,56 @@
-/*package com.meritamerica.assignment4;
+
+
+
+
+
+package com.meritamerica.assignment4;
+
+
 public class CDOffering {
+
 	private int term;
 	private double interestRate;
 	
-	//1. CDOferring (int term, double interestRate)
-		public CDOffering(int term, double interestRate) {
-			this.term = term;
-			this.interestRate = interestRate;
+
+// CONSTRUCTOR
+	
+	public CDOffering() {
 		
-		}
-	//2. int getTerm ()
-		public int getTerm() {
-			return this.term;
-			
-		}
-	//3. double getInterestRate ()
-		public double getInterestRate() {
-			return this.interestRate;
-		}
-	public String writeToString(){
-		return term+","+interestRate;
 	}
-	public static CDOffering readFromString(String cdOfferingInfo) {
-		String[] cdInfo =  cdOfferingInfo.split(",");
-				CDOffering cDOffering = new CDOffering(Integer.getInteger(cdInfo[0]), Double.valueOf(cdInfo[1]));
-		return cDOffering;
+
+	public CDOffering (int term, double interestRate) {
+		this.term = term;
+		this.interestRate = interestRate;
 	}
+		
+	
+	public int getTerm() {
+		return term;
+	}
+	
+	public double getInterestRate() {
+		return interestRate;
+	}
+	
+	public String toString() {
+		return "Your CD Offering Terms: " + this.getTerm() + " Your CD Offering Interest Rate: " + this.getInterestRate();
+	}
+		
+//------------------------------- ASSIGNMENT 3 AMENDMENTS ------------------------------
+	
+	
+	public static CDOffering readFromString(String string) {
+		String[] newArray = string.split(",");
+		
+		int term = Integer.valueOf(newArray[0]);
+		
+		double interestRate = Double.valueOf(newArray[1]);
+		
+		return new CDOffering(term, interestRate);
+	}
+	
 }
-*/
-package com.meritamerica.assignment3;
 
-public class CDOffering {
-    private int term;
-    private double interestRate;
 
-    //1. CDOferring (int term, double interestRate)
-    public CDOffering(int term, double interestRate) {
-        this.term = term;
-        this.interestRate = interestRate;
 
-    }
 
-    //2. int getTerm ()
-    public int getTerm() {
-        return this.term;
-
-    }
-    //3. double getInterestRate ()
-    public double getInterestRate() {
-        return this.interestRate;
-    }
-    static CDOffering readFromString(String cdOfferingDataString)
-    {
-        String[] holding = cdOfferingDataString.split(",");
-        int term = Integer.parseInt(holding[0]);
-        double interestRate = Double.parseDouble(holding[1]);
-        return new CDOffering(term, interestRate);
-    }
-
-    public String writeToString()
-    {
-        StringBuilder cdOfferingData = new StringBuilder();
-        cdOfferingData.append(term).append(",");
-        cdOfferingData.append(interestRate);
-        return cdOfferingData.toString();
-    }
-}

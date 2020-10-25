@@ -1,3 +1,8 @@
+/* Week 5 - Partner Pair Assignment #4
+ *  October 25, 2020
+ */
+ 
+
 package com.meritamerica.assignment4;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +79,7 @@ public abstract class Transaction {
 		
 // targetAccountNum is -1 for both Withdraw & Deposit transaction
 // 		
-			if (targetAccountNUm == -1) {
+			if (targetAccountNum == -1) {
 				if (amount < 0) {
 					WithdrawTransaction newTransaction = new WithdrawTransaction(amount, sourceAccountNum,targetAccountNum, Date d);
 				
@@ -91,7 +96,8 @@ public abstract class Transaction {
 				return newTransaction;
 		
 		
-		} catch (Exception e){
+		} catch (Exception e) {
+		}
 			return null;
 		}
 	

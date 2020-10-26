@@ -12,15 +12,6 @@ import java.util.List;
 
 
 public class FraudQueue {
-}
-
-    void addTransaction(com.meritamerica.assignment4.Transaction transaction) {
-        transactions.add(transaction);
-    }
-
-    List<com.meritamerica.assignment4.Transaction> getTransaction() {
-        return transactions;
-    }
 	
 
 }

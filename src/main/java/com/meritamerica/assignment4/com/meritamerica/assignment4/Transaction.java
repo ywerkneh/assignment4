@@ -1,110 +1,125 @@
+/* Week 5 - Partner Pair Assignment #4
+ *  October 25, 2020
+ */
+ 
+
 package com.meritamerica.assignment4;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public abstract class Transaction {
 
-
-	com.meritamerica.assignment4.BankAccount account;
-	com.meritamerica.assignment4.BankAccount targetAccount;
-	double amount;
-	Date date;
-
-	public com.meritamerica.assignment4.BankAccount getSourceAccount() {
-		return account;
+	
+	//Instance Variables
+	BankAccount sourceAccountNum;
+	BankAccount targetAccountNum;
+	java.util.Date date;
+	boolean isProcessed = false;
+	String rejectionReason;
+	static FraudQueue fraud;
+	private double amount;
+	
+	
+	
+	static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
+	//Source Account
+	public BankAccount getSourceAccount() {
+		return sourceAccountNum;
 	}
-
-	public void setSourceAccount(com.meritamerica.assignment4.BankAccount account) {
-		this.account = account;
+	
+	public void setSourceAccount(BankAccount sourceAccount) {
+		this.sourceAccountNum = sourceAccount;
 	}
-
-	public com.meritamerica.assignment4.BankAccount getTargetAccount() {
-		return targetAccount;
+	
+	//Target Account
+	public BankAccount getTargetAccount() {
+		return targetAccountNum;
 	}
-
-	public void setTargetAccount(com.meritamerica.assignment4.BankAccount targetAccount) {
-		this.targetAccount = targetAccount;
+	
+	public void setTargetAccount(BankAccount targetAccount) {
+		this.targetAccountNum = targetAccount;
+		
 	}
-
+	
+	//Amount
 	public double getAmount() {
 		return amount;
 	}
-
+	
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-
-	public Date getTransactionDate(){
+	//Date
+	public java.util.Date getDate() {
 		return date;
 	}
-
-	public void setTransactionDate(Date date) {
+	public void setDate(java.util.Date date) {
 		this.date = date;
 	}
-	/**
-	 * A method that writes information that writes the date passed through into a string.
-	 * Reformatted date to be simpler.
-	 * @return
-	 */
+	
+	//String writeToString
 	public String writeToString() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		StringBuilder toString = new StringBuilder();
-		if(account == null) {
-			toString.append(-1);
-		}
-		else {
-			toString.append(account.getAccountNumber());
-		}
-		toString.append(",");
-		toString.append(targetAccount.getAccountNumber());
-		toString.append(",");
-		toString.append(amount);
-		toString.append(",");
-		toString.append(dateFormat.format(date));
-		return toString.toString();
+		System.out.println ("TRANSACTION- source, target,amount,date");
+	return "TargetAccount: " + this.sourceAccountNum + this.targetAccountNum + amount + this.amount + date + this.date;
 	}
-	/**
-	 *Read from String , gets data thats being passed through, and returns Transaction with the information
-	 * @param transactionDataString
-	 * @return
-	 * @throws ParseException
-	 */
-	public static Transaction readFromString(String transactionDataString) throws ParseException {
-		String[] temp = transactionDataString.split(",");
-
-		com.meritamerica.assignment4.BankAccount source;
-		if(temp[0].equals("-1")) {
-			source = null;
+	
+	public static Transaction readFromString(String transactionDataString) {
+		
+		
+		Date d;
+		
+		try {
+		    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+			String Array1[] =transactionDataString.split(",");
+			double amount = Double.parseDouble(Array1[0]);
+			long sourceAccountNum = Integer.parseInt(Array1[1]);
+			long targetAccountNum = Integer.parseInt(Array1[2]);
+			Date d = dateFormatter.parse(Array1[3]);
+		
+// targetAccountNum is -1 for both Withdraw & Deposit transaction
+// 		
+			if (targetAccountNum == -1) {
+				if (amount < 0) {
+					WithdrawTransaction newTransaction = new WithdrawTransaction(amount, sourceAccountNum,targetAccountNum, Date d);
+				
+					return newTransaction;
+				}
+				
+				DepositTransaction newTransaction = new DepositTransaction (amount, sourceAccountNum,targetAccountNum,Date d);
+				
+				return newTransaction;
+			
+				}
+				TransferTransaction newTransaction = new TransferTransaction (amount, sourceAccountNum, targetAccountNum,Date d);
+		
+				return newTransaction;
+		
+		
+		} catch (Exception e) {
 		}
-		else {
-			source = com.meritamerica.assignment4.MeritBank.getBankAccount(Long.valueOf(temp[0]));
+			return null;
 		}
-
-		com.meritamerica.assignment4.BankAccount target = com.meritamerica.assignment4.MeritBank.getBankAccount(Long.valueOf(temp[1]));
-
-		double amount = Double.valueOf(temp[2]);
-		Date date = new SimpleDateFormat("dd/MM/yyyy").parse(temp[3]);
-
-		if(Integer.valueOf(temp[0]) == -1) {
-			if(Double.valueOf(temp[2]) < 0) {
-				com.meritamerica.assignment4.WithdrawTransaction transaction = new com.meritamerica.assignment4.WithdrawTransaction(target, amount);
-				transaction.setTransactionDate(date);
-				System.out.println(transaction.writeToString());
-				return transaction;
-			}
-			else {
-				com.meritamerica.assignment4.DepositTransaction transaction = new com.meritamerica.assignment4.DepositTransaction(target, amount);
-				transaction.setTransactionDate(date);
-				System.out.println(transaction.writeToString());
-				return transaction;
-			}
+	
+		//EXCEPTIONS THROWN
+		public abstract void process() throws NegativeAmountException, ExceedsAvailableBalanceException,ExceedsFraudSuspicionLimitException;
+	
+		
+		// PROCESSED BY FRAUD TEAM
+		
+		public boolean isProcessedByFraudTeam() {
+			return isProcessed;
 		}
-		else {
-			com.meritamerica.assignment4.TransferTransaction transaction = new com.meritamerica.assignment4.TransferTransaction(source, target, amount);
-			System.out.println(transaction.writeToString());
-			return transaction;
+		
+		public void setProcessedByFraudTeam( boolean isProcessed) {
+			this.isProcessed = isProcessed;
+		}
+		public String getRejectionReason() {
+			return rejectionReason;
+			
+		}
+		public void setRejectionReason(String rejectReason) {
+			this.rejectionReason = rejectionReason;
 		}
 	}
-}
+

@@ -17,7 +17,6 @@ public class DepositTransaction extends Transaction {
 	public DepositTransaction (BankAccount targetAccount, double amount) {
 		this.targetAccount = targetAccount;
 		this.amount = amount;
-		this.date = new Date();
 		
 	}
 }

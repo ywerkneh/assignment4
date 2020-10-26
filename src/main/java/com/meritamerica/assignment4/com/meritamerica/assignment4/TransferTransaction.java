@@ -15,10 +15,9 @@ public class TransferTransaction extends Transaction {
 
 //CONSTRUCTOR
 	 public TransferTransaction(BankAccount sourceAccount, BankAccount targetAccount, double amount) {
-
-		 this.account = sourceAccount;
-		 this.targetAccount = targetAccount;
-		 this.amount = amount;
-		 this.date = new Date();
+		
+		this.sourceAccount = sourceAccount;
+		this.targetAccount = targetAccount;
+		this.amount = amount;
 	 }
 }

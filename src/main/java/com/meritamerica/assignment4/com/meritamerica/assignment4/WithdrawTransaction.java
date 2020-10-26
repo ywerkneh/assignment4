@@ -18,7 +18,6 @@ import java.util.Date;
 	WithdrawTransaction(BankAccount targetAccount, double amount){
 		this.targetAccountNum = targetAccount;
 		this.amount = amount;
-		this.date = new Date();
 		
 	}
 }

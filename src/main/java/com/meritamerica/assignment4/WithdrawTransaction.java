@@ -16,8 +16,40 @@ import java.util.Date;
 	
 	//CONSTRUCTOR
 	WithdrawTransaction(BankAccount targetAccount, double amount){
-		this.targetAccountNum = targetAccount;
+		this.targetAccount = targetAccount;
 		this.amount = amount;
 		
+		
+	}
+
+	@Override
+	public void process()
+			throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
+		
+		
+		if (amount < 0) {
+			
+			throw new NegativeAmountException("WARNING! Can not withdraw a negative amount");
+		}
+	
+		
+		else if (targetAccount.getBalance() < amount) {
+			
+			throw new ExceedsAvailableBalanceException("WARNING! You can not withdraw more than what is in the account!");
+		}
+		
+		
+		else if (amount > 1000) {
+			
+			throw new ExceedsFraudSuspicionLimitException("WARNING! We are sorry this transaction can not completed");
+			
+		}
+		
+		else {
+			
+			System.out.println("WITHDRAW AMOUNT:");
+			
+			targetAccount.withdraw(amount);
+		}
 	}
 }

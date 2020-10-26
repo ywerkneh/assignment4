@@ -5,19 +5,23 @@
 
 package com.meritamerica.assignment4;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import java.util.Date;
 
 public abstract class Transaction {
 
 	
 	//Instance Variables
-	BankAccount sourceAccountNum;
-	BankAccount targetAccountNum;
-	java.util.Date date;
+	private BankAccount sourceAccountNum;
+	private BankAccount targetAccountNum;
+	double amount;
+	private java.util.Date date;
 	boolean isProcessed = false;
 	String rejectionReason;
 	static FraudQueue fraud;
-	private double amount;
+	
 	
 	
 	
@@ -59,47 +63,39 @@ public abstract class Transaction {
 	}
 	
 	//String writeToString
-	public String writeToString() {
-		System.out.println ("TRANSACTION- source, target,amount,date");
-	return "TargetAccount: " + this.sourceAccountNum + this.targetAccountNum + amount + this.amount + date + this.date;
-	}
-	
 	public static Transaction readFromString(String transactionDataString) {
-		
-		
-		Date d;
-		
+
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+
 		try {
-		    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-			String Array1[] =transactionDataString.split(",");
-			double amount = Double.parseDouble(Array1[0]);
-			long sourceAccountNum = Integer.parseInt(Array1[1]);
-			long targetAccountNum = Integer.parseInt(Array1[2]);
-			Date d = dateFormatter.parse(Array1[3]);
-		
-// targetAccountNum is -1 for both Withdraw & Deposit transaction
-// 		
+
+			String chd[] = transactionDataString.split(",");
+//			
+			long targetAccountNum = Long.parseLong(chd[0]);
+			long sourceAccountNum = Long.parseLong(chd[1]);
+			double amount = Double.parseDouble(chd[2]);
+			Date date = dateFormatter.parse(chd[3]);
+			// targetAccountNum is -1 for both withdraw & deposit - use this parameter to create either 
+			// then accountNum is positive for DEPOSIT & negative for WITHDRAW			
+
 			if (targetAccountNum == -1) {
 				if (amount < 0) {
-					WithdrawTransaction newTransaction = new WithdrawTransaction(amount, sourceAccountNum,targetAccountNum, Date d);
-				
+					WithdrawTransaction newTransaction = new WithdrawTransaction(MeritBank.getBankAccount(sourceAccountNum) , amount);
 					return newTransaction;
 				}
-				
-				DepositTransaction newTransaction = new DepositTransaction (amount, sourceAccountNum,targetAccountNum,Date d);
-				
+				DepositTransaction newTransaction = new DepositTransaction(MeritBank.getBankAccount(sourceAccountNum), amount);
 				return newTransaction;
-			
-				}
-				TransferTransaction newTransaction = new TransferTransaction (amount, sourceAccountNum, targetAccountNum,Date d);
-		
-				return newTransaction;
-		
-		
-		} catch (Exception e) {
+			}
+			// Transfer - transaction class non -1 targetAccountNum - use parameter to create class
+			TransferTransaction newTransaction = new TransferTransaction(MeritBank.getBankAccount(sourceAccountNum), 
+					MeritBank.getBankAccount(targetAccountNum), amount);
+			return newTransaction;
 		}
+		catch (ParseException e) {
 			return null;
 		}
+	}
+
 	
 		//EXCEPTIONS THROWN
 		public abstract void process() throws NegativeAmountException, ExceedsAvailableBalanceException,ExceedsFraudSuspicionLimitException;

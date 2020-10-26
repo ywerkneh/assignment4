@@ -6,4 +6,14 @@ package com.meritamerica.assignment4;
 
 public class ExceedsAvailableBalanceException extends Exception {
 
-}
+
+		public ExceedsAvailableBalanceException(String errorMessage) {
+			
+			super(errorMessage);
+			
+		}
+
+		
+		private static final long serialVersionUID = 1L;
+
+	}

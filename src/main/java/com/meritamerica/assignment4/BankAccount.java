@@ -21,6 +21,7 @@ public abstract class BankAccount {
 	private double interestRate;
 	double bankAccount;
 	private java.util.Date accountOpenedOn;
+	private List<Transaction> transactions = new ArrayList<Transaction>();
 
 	static SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -139,13 +140,15 @@ public abstract class BankAccount {
 // -------------------------- Assignment 4 Amendments ---------------------------
 
 	public void addTransaction(Transaction transaction) {
+		
+		transactions.add(transaction);
 
 	}
 
 	public List<Transaction> getTransactions() {
 		
 		
-		return null;
+		return transactions;
 
 	}
 }

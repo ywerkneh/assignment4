@@ -19,7 +19,7 @@ public class DepositTransaction extends Transaction {
 		this.amount = amount;
 		
 	}
-}
+
 
 	@Override
 	public void process()

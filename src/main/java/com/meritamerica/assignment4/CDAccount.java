@@ -4,6 +4,7 @@
 
 package com.meritamerica.assignment4;
 import com.meritamerica.assignment4.CDOffering;
+
 import com.meritamerica.assignment4.MeritBank;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

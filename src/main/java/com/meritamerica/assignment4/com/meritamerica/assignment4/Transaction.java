@@ -7,7 +7,6 @@ import java.util.Date;
 public abstract class Transaction {
 
 
-	protected BankAccount targetAccountNum;
 	com.meritamerica.assignment4.BankAccount account;
 	com.meritamerica.assignment4.BankAccount targetAccount;
 	double amount;

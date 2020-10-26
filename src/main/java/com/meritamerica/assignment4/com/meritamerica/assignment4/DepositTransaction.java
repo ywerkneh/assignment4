@@ -22,9 +22,9 @@ public class DepositTransaction extends Transaction {
 	}
 }
 
-	@Override
+	/*@Override
 	public void process()
-throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
+  throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
 		
 		
 		if (amount < 0) {
@@ -53,3 +53,5 @@ throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSu
 		}
 	}
 }
+
+	 */
